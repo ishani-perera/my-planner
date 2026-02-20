@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Planner 🐻</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <div class="header">
+    <div class="bear">🐻</div>
+    <div>
+      <h1>My Planner</h1>
+      <p>Welcome! Organize your life with ease. 🍪</p>
+    </div>
+    <div class="header-r">📖✨</div>
+  </div>
+
+  <!-- ══════════════ NAV TABS ══════════════ -->
+  <div class="nav-tabs">
+    <button class="tab" onclick="switchTab('habit')" id="tab-habit">
+      <span class="ti">📅</span>Habit Tracker
+    </button>
+    <button class="tab" onclick="switchTab('academic')" id="tab-academic">
+      <span class="ti">🎓</span>Academics
+    </button>
+    <button class="tab" onclick="switchTab('weekly')" id="tab-weekly">
+      <span class="ti">⏰</span>Weekly Planner
+    </button>
+    <button class="tab active" onclick="switchTab('todo')" id="tab-todo">
+      <span class="ti">📋</span>To Do List
+    </button>
+  </div>
+
+  <!-- ══════════════ CLOCK BAR ══════════════ -->
+  <div class="clock-bar">
+    <div class="clock-card">
+      <div class="clock-time" id="clock">--:--</div>
+      <div class="clock-day" id="day-label">---</div>
+    </div>
+    <div>
+      <div class="page-title" id="page-title">To Do List</div>
+      <div class="page-sub"   id="page-sub">Stay focused, you got this! 🌟</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PAGE: TO DO LIST ══════════════ -->
+  <div class="page active" id="page-todo">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="t-total">0</div>
+        <div class="stat-lbl">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="t-done" style="color:var(--blue)">0</div>
+        <div class="stat-lbl">Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="t-left" style="color:var(--brown-l)">0</div>
+        <div class="stat-lbl">Left</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="prog-wrap">
+        <div class="prog-hd">
+          <span class="prog-lbl">Today's Progress</span>
+          <span class="prog-pct" id="t-pct">0%</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-bar" id="t-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title">✏️ Add New Task</div>
+      <div class="row" style="margin-bottom:10px">
+        <input type="text" class="inp" id="t-inp" placeholder="What do you need to do? 🌸" maxlength="100">
+        <button class="btn btn-brown" onclick="addTodo()" style="white-space:nowrap">+ Add</button>
+      </div>
+      <div class="row" style="flex-wrap:wrap;gap:8px">
+        <select class="sel" id="t-cat">
+          <option value="work">💼 Work</option>
+          <option value="personal">🌸 Personal</option>
+          <option value="study">📚 Study</option>
+          <option value="health">🍎 Health</option>
+        </select>
+        <select class="sel" id="t-pri">
+          <option value="high">🔴 High</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+        <input type="date" class="sel" id="t-due">
+      </div>
+    </div>
+
+    <div class="filter-pills" id="t-pills">
+      <span class="pill active" data-f="all">All</span>
+      <span class="pill" data-f="active">Active</span>
+      <span class="pill" data-f="done">Done ✓</span>
+      <span class="pill" data-f="work">💼 Work</span>
+      <span class="pill" data-f="personal">🌸 Personal</span>
+      <span class="pill" data-f="study">📚 Study</span>
+      <span class="pill" data-f="health">🍎 Health</span>
+    </div>
+
+    <div class="sec-title">📌 Tasks <span class="badge" id="t-count">0</span></div>
+    <div id="t-list"></div>
+  </div>
+
+  <!-- ══════════════ PAGE: HABIT TRACKER ══════════════ -->
+  <div class="page" id="page-habit">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="h-total">0</div>
+        <div class="stat-lbl">Habits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="h-today" style="color:var(--blue)">0</div>
+        <div class="stat-lbl">Done Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="h-streak" style="color:var(--brown-l)">0</div>
+        <div class="stat-lbl">Best Streak</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title">🌿 Add New Habit</div>
+      <div class="row" style="margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <input type="text" class="inp" id="h-inp"
+               placeholder="e.g. Morning walk, Read 20 min..."
+               style="flex:1;min-width:160px">
+        <select class="sel" id="h-icon">
+          <option value="🏃">🏃 Exercise</option>
+          <option value="📚">📚 Reading</option>
+          <option value="🧘">🧘 Meditation</option>
+          <option value="💧">💧 Hydration</option>
+          <option value="🍎">🍎 Nutrition</option>
+          <option value="😴">😴 Sleep</option>
+          <option value="✏️">✏️ Study</option>
+          <option value="🌿">🌿 Self Care</option>
+          <option value="🎵">🎵 Music</option>
+          <option value="⭐">⭐ Other</option>
+        </select>
+        <button class="btn btn-brown" onclick="addHabit()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="sec-title">📅 This Week</div>
+    <div id="h-list"></div>
+  </div>
+
+  <!-- ══════════════ PAGE: ACADEMICS ══════════════ -->
+  <div class="page" id="page-academic">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="a-subj">0</div>
+        <div class="stat-lbl">Subjects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="a-tasks" style="color:var(--blue)">0</div>
+        <div class="stat-lbl">Tasks Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="a-gpa" style="color:var(--brown-l)">—</div>
+        <div class="stat-lbl">Avg Grade</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title">🎓 Add Subject</div>
+      <div class="row" style="flex-wrap:wrap;gap:8px">
+        <input type="text" class="inp" id="a-inp"
+               placeholder="Subject name..." style="flex:1;min-width:140px">
+        <select class="sel" id="a-color">
+          <option value="#aec6d4">🔵 Blue</option>
+          <option value="#f2d5d0">🌸 Pink</option>
+          <option value="#c5d9c0">🌿 Green</option>
+          <option value="#f0c8b0">🍑 Peach</option>
+          <option value="#d4b8e0">💜 Purple</option>
+          <option value="#f0d8a0">🌻 Yellow</option>
+        </select>
+        <button class="btn btn-brown" onclick="addSubject()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="sec-title">📚 Subjects <span class="badge" id="a-count">0</span></div>
+    <div id="a-list"></div>
+  </div>
+
+  <!-- ══════════════ PAGE: WEEKLY PLANNER ══════════════ -->
+  <div class="page" id="page-weekly">
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div class="sec-title" style="margin-bottom:0">
+          📆 Week of <span id="week-label"></span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-blue btn-sm" onclick="changeWeek(-1)">← Prev</button>
+          <button class="btn btn-brown btn-sm" onclick="changeWeek(0)">Today</button>
+          <button class="btn btn-blue btn-sm" onclick="changeWeek(1)">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-grid" id="week-grid"></div>
+
+    <div class="card">
+      <div class="sec-title">🏷️ Legend</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span style="background:var(--blue-s);color:#4a7a96;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">💼 Work</span>
+        <span style="background:var(--pink-s);color:#a06070;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">🌸 Personal</span>
+        <span style="background:var(--green-s);color:#4a6e46;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">📚 Study</span>
+        <span style="background:var(--peach-s);color:#a06040;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">🍎 Health</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL: ADD EVENT ══════════════ -->
+  <div class="modal-overlay" id="ev-modal" style="display:none">
+    <div class="modal">
+      <h3>✨ Add Event</h3>
+      <div class="row">
+        <input type="text" class="inp" id="ev-title" placeholder="Event title..." maxlength="50">
+      </div>
+      <div class="row" style="gap:10px;flex-wrap:wrap">
+        <input type="time" class="sel" id="ev-time" style="flex:1">
+        <select class="sel" id="ev-type" style="flex:1">
+          <option value="">💼 Work</option>
+          <option value="ev-pink">🌸 Personal</option>
+          <option value="ev-green">📚 Study</option>
+          <option value="ev-peach">🍎 Health</option>
+        </select>
+      </div>
+      <div class="modal-btns">
+        <button class="btn btn-brown btn-sm" onclick="saveEvent()">Save ✓</button>
+        <button class="btn btn-sm" style="background:#f0e0d5;color:var(--brown)" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+
+</body>
+</html>
